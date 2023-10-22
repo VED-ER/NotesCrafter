@@ -90,7 +90,10 @@ const TrashBox = () => {
                 {notes.length > 1 && (
                     <ConfirmModal onConfirm={onDeleteAll}>
                         <div className="px-2">
-                            <Button className="w-full" variant={'destructive'}>Delete all</Button>
+                            <Button className="w-full" variant={'destructive'}>
+                                Delete all
+                                <Trash className="w-4 h-4 ml-2" />
+                            </Button>
                         </div>
                     </ConfirmModal>
                 )}
