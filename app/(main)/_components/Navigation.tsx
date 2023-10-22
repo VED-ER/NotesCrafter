@@ -17,6 +17,10 @@ import { useSearch } from "@/hooks/useSearch"
 import { useSettings } from "@/hooks/useSettings"
 import Navbar from "./Navbar"
 
+const DEFAULT_SIDEBAR_WIDTH = 260
+const MIN_SIDEBAR_WIDTH = 230
+const MAX_SIDEBAR_WIDTH = 480
+
 const Navigation = () => {
     const pathname = usePathname()
     const params = useParams()
@@ -39,11 +43,12 @@ const Navigation = () => {
         }
     }, [isMobile])
 
-    // useEffect(() => {
-    //     if (isMobile) {
-    //         collapse()
-    //     }
-    // }, [pathname, isMobile])
+    useEffect(() => {
+        // if initialy loaded and then switched to a single note view
+        if (isMobile) {
+            collapse()
+        }
+    }, [pathname, isMobile])
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault()
@@ -56,20 +61,17 @@ const Navigation = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
         if (!isResizingRef.current) return
-        console.log('1');
 
         let newWidth = e.clientX
-        if (newWidth < 240) newWidth = 240
-        if (newWidth > 480) newWidth = 480
+        if (newWidth < MIN_SIDEBAR_WIDTH) newWidth = MIN_SIDEBAR_WIDTH
+        if (newWidth > MAX_SIDEBAR_WIDTH) newWidth = MAX_SIDEBAR_WIDTH
 
         if (sidebarRef.current && navbarRef.current) {
-            console.log('2');
 
             sidebarRef.current.style.width = `${newWidth}px`
             navbarRef.current.style.setProperty("left", `${newWidth}px`)
-            // navbarRef.current.style.setProperty("width", `calc(100%-${newWidth}px)`)
-            navbarRef.current.style.left = `${newWidth}px`
-            navbarRef.current.style.width = `calc(100%-${newWidth}px)`
+            // must have empty space between metrics****
+            navbarRef.current.style.setProperty("width", `calc(100% - ${newWidth}px)`)
         }
     }
 
@@ -84,9 +86,9 @@ const Navigation = () => {
             setIsCollapsed(false)
             setIsReseting(true)
 
-            sidebarRef.current.style.width = isMobile ? '100%' : '240px'
-            navbarRef.current.style.setProperty('width', isMobile ? '0' : 'calc(100%-240px)')
-            navbarRef.current.style.setProperty('left', isMobile ? '100%' : '240px')
+            sidebarRef.current.style.width = isMobile ? '100%' : `${DEFAULT_SIDEBAR_WIDTH}px`
+            navbarRef.current.style.setProperty('width', isMobile ? '0' : `calc(100% - ${DEFAULT_SIDEBAR_WIDTH}px)`)
+            navbarRef.current.style.setProperty('left', isMobile ? '100%' : `${DEFAULT_SIDEBAR_WIDTH}px`)
             setTimeout(() => setIsReseting(false), 300)
         }
     }
@@ -170,7 +172,7 @@ const Navigation = () => {
         <div
             ref={navbarRef}
             className={cn(
-                "absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
+                `absolute top-0 z-[99999] left-60 w-[calc(100% - ${DEFAULT_SIDEBAR_WIDTH}px)]`,
                 isReseting && "transition-all ease-in-out duration-300",
                 isMobile && "left-0 w-full"
             )}
