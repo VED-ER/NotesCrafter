@@ -2,6 +2,7 @@
 
 import { Spinner } from "@/components/Spinner"
 import ConfirmModal from "@/components/modals/ConfirmModal"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -17,6 +18,7 @@ const TrashBox = () => {
     const notes = useQuery(api.notes.getArchived)
     const restore = useMutation(api.notes.restore)
     const remove = useMutation(api.notes.remove)
+    const removeNotes = useMutation(api.notes.removeNotes)
 
     const [search, setSearch] = useState('')
     const filteredNotes = notes?.filter(note => note.title.toLowerCase().includes(search.toLowerCase()))
@@ -52,6 +54,18 @@ const TrashBox = () => {
         }
     }
 
+    const onDeleteAll = () => {
+        if (!notes) return
+        const notesIds = notes.map(n => n._id)
+        const promise = removeNotes({ ids: notesIds })
+        toast.promise(promise, {
+            loading: `Deleting notes`,
+            success: `Notes deleted`,
+            error: `Failed to delete notes`
+        })
+        router.push('/notes')
+    }
+
     // loading
     if (notes === undefined) {
         return (
@@ -63,17 +77,26 @@ const TrashBox = () => {
 
     return (
         <div className="text-sm">
-            <div className="flex items-center gap-x-1 p-2">
-                <Search className="w-4 h-4" />
-                <Input
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="h-7 px-2 focus-visible:ring-transparent bg-secondary"
-                    placeholder="Filter by note title..."
-                />
+            <div className="flex flex-col">
+                <div className="flex items-center gap-x-1 p-2">
+                    <Search className="w-4 h-4" />
+                    <Input
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="px-2 focus-visible:ring-transparent bg-secondary"
+                        placeholder="Filter by note title..."
+                    />
+                </div>
+                {notes.length > 1 && (
+                    <ConfirmModal onConfirm={onDeleteAll}>
+                        <div className="px-2">
+                            <Button className="w-full" variant={'destructive'}>Delete all</Button>
+                        </div>
+                    </ConfirmModal>
+                )}
             </div>
             <div className="mt-2 px-1 pb-1">
-                <p className="hidden last:block text-xm text-center text-muted-foreground pb-2">No notes found</p>
+                <p className="hidden last:block text-xm text-center text-muted-foreground pb-2">Trash is empty.</p>
                 {filteredNotes?.map(note => (
                     <div
                         key={note._id}

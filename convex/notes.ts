@@ -85,6 +85,39 @@ export const remove = mutation({
     }
 })
 
+export const removeNotes = mutation({
+    args: { ids: v.array(v.id('notes')) },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+
+        if (!identity) {
+            throw new Error('Not authenticated')
+        }
+        const userId = identity.subject
+
+        const deletedNotes = []
+
+        for (const noteId of args.ids) {
+
+            const note = await ctx.db.get(noteId)
+
+            if (!note) {
+                throw new Error('Not found')
+            }
+
+            if (note.userId !== userId) {
+                throw new Error('Unauthorized')
+            }
+            await ctx.db.delete(noteId)
+
+            deletedNotes.push(note)
+        }
+        // if deleted and has children, remove parentNote from all children
+        
+        return deletedNotes
+    }
+})
+
 export const getArchived = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity()
