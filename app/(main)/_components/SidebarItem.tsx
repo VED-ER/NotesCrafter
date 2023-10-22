@@ -112,7 +112,7 @@ const SidebarItem = ({
                         >
                             <div
                                 role="button"
-                                className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+                                className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
                             >
                                 <MoreHorizontalIcon className="w-4 h-4 text-muted-foreground" />
                             </div>

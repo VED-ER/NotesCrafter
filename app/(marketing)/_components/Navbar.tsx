@@ -14,7 +14,7 @@ const Navbar = () => {
     const { isAuthenticated, isLoading } = useConvexAuth()
     const scrolled = useScrollTop(10)
     return (
-        <div className={cn('z-50 bg-background dark:bg-[#1e1e1e] fixed top-0 flex items-center w-full p-6', scrolled && 'border-b shadow-sm')}>
+        <div className={cn('z-50 bg-background fixed top-0 flex items-center w-full p-6', scrolled && 'border-b shadow-sm')}>
             <div className='hidden md:block'>
                 <Logo />
             </div>
