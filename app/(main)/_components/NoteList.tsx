@@ -56,7 +56,7 @@ const NoteList = ({ parentNoteId, level = 0 }: NoteListProps) => {
                 style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}
                 className={cn("hidden text-sm font-medium text-muted-foreground/80", expanded && 'last:block', level === 0 && 'hidden')}
             >
-                No pages inside
+                No notes inside
             </p>
             {notes.map(doc => (
                 <div key={doc._id}>

@@ -2,7 +2,7 @@
 import { useScrollTop } from '@/hooks/useScrollTop'
 import { cn } from '@/lib/utils'
 import React from 'react'
-import Logo from './Logo'
+import Logo from '../../../components/Logo'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/theme-mode-toggle'
 import { useConvexAuth } from 'convex/react'

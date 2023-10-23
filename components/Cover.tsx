@@ -45,11 +45,11 @@ const Cover = ({ url, preview }: CoverProps) => {
             )}
             {url && !preview && (
                 <div className={cn("opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2", isMobile && "opacity-100")}>
-                    <Button onClick={() => coverImage.onReplace(url)} className="text-muted-foreground text-xs" variant={'outline'} size={'sm'}>
+                    <Button onClick={() => coverImage.onReplace(url)} className="text-xs" variant={'secondary'} size={'sm'}>
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Change cover
                     </Button>
-                    <Button onClick={onRemoveCoverImage} className="text-muted-foreground text-xs" variant={'outline'} size={'sm'}>
+                    <Button onClick={onRemoveCoverImage} className=" text-xs" variant={'secondary'} size={'sm'}>
                         <X className="w-4 h-4 mr-2" />
                         Remove cover
                     </Button>

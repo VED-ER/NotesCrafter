@@ -20,7 +20,7 @@ const NoteIdPage = ({ params }: NoteIdPageProps) => {
 
     const note = useQuery(api.notes.getById, { noteId: params.noteId })
     const update = useMutation(api.notes.update)
-    console.log('RENDER');
+
     const onChange = (content: string) => {
         update({ id: params.noteId, content })
 
@@ -52,7 +52,7 @@ const NoteIdPage = ({ params }: NoteIdPageProps) => {
     return (
         <div className="pb-40">
             <Cover url={note.coverImage} />
-            <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+            <div className="md:max-w-3xl lg:max-w-5xl mx-auto">
                 <Toolbar initialData={note} />
                 <Editor
                     onChange={onChange}

@@ -16,6 +16,7 @@ import TrashBox from "./TrashBox"
 import { useSearch } from "@/hooks/useSearch"
 import { useSettings } from "@/hooks/useSettings"
 import Navbar from "./Navbar"
+import Logo from "@/components/Logo"
 
 const DEFAULT_SIDEBAR_WIDTH = 260
 const MIN_SIDEBAR_WIDTH = 230
@@ -149,6 +150,7 @@ const Navigation = () => {
                 />
             </div>
             <div className="mt-4">
+                <span className="text-muted-foreground font-semibold tracking-wider pl-3">WORKSPACE</span>
                 <NoteList />
                 <SidebarItem
                     label="New Note"
@@ -163,6 +165,9 @@ const Navigation = () => {
                         <TrashBox />
                     </PopoverContent>
                 </Popover>
+            </div>
+            <div className="mt-auto p-3">
+                <Logo />
             </div>
             <div
                 onMouseDown={handleMouseDown}
