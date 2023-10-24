@@ -179,7 +179,8 @@ const Navigation = () => {
             className={cn(
                 `absolute top-0 z-[99999] left-60 w-[calc(100% - ${DEFAULT_SIDEBAR_WIDTH}px)]`,
                 isReseting && "transition-all ease-in-out duration-300",
-                isMobile && "left-0 w-full"
+                isMobile && isCollapsed && "left-0 w-full",
+                isMobile && !isCollapsed && "hidden"
             )}
         >
             {!!params.noteId ? (

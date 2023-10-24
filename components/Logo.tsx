@@ -18,7 +18,7 @@ const Logo = () => {
         <div
             role='button'
             onClick={() => router.push('/')}
-            className='hidden md:flex items-center gap-x-2'
+            className='flex items-center gap-x-2'
         >
             <Image
                 src={'/logo.png'}

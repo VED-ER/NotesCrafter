@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button'
 
 const Footer = () => {
     return (
-        <div className='w-full flex items-center p-6 bg-background z-50'>
-            <Logo />
+        <div className='w-full bottom-0 flex items-center p-6 bg-background z-50'>
+            <div className='hidden md:block'>
+                <Logo />
+            </div>
             <div className='flex md:ml-auto justify-between w-full md:justify-end'>
                 <Button variant={'ghost'} size={'sm'}>
                     Privacy Policy

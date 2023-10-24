@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Footer from "./_components/Footer";
 import Heading from "./_components/Heading";
 import Heroes from "./_components/Heroes";
 import Main from "./_components/Main";
@@ -15,7 +13,6 @@ export default function MarketingPage() {
         <Heroes />
         <GetStarted />
       </div>
-      <Footer />
     </div>
   );
 }
