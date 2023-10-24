@@ -6,7 +6,7 @@ import Link from "next/link"
 
 const CareersPage = () => {
     return (
-        <div className="h-auto flex flex-col items-center justify-center space-y-4">
+        <div className="h-full bg-background flex flex-col items-center justify-center space-y-4">
             <Image
                 src={'/error.png'}
                 width={300}
