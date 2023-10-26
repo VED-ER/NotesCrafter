@@ -8,6 +8,20 @@ body,
   height: 100%;
 }
 
+.thin-scrollbar::-webkit-scrollbar {
+  overflow: auto;
+  height: 4px;
+  border-radius: 10px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

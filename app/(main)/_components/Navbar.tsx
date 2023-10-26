@@ -32,7 +32,7 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
 
     return (
         <>
-            <nav className="bg-background px-3 py-2 w-full flex items-center gap-x-4">
+            <nav className="bg-background px-3 py-2 w-full flex items-center justify-between gap-x-4">
                 {isCollapsed && (
                     <MenuIcon
                         role="button"
@@ -41,7 +41,7 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                     />
                 )}
                 {note && (
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-x-2 justify-between w-full max-w-[90%] md:max-w-full ">
                         <TitleList note={note} />
                         <div className="flex items-center gap-x-2">
                             <Publish initialData={note} />

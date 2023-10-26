@@ -69,7 +69,7 @@ const Title = ({ initialData }: TitleProps) => {
                     onChange={onChange}
                     onKeyDown={onKeyDown}
                     value={title}
-                    className="h-7 px-2 "
+                    className="h-7 px-2 focus-visible:ring-transparent w-36"
                 />
             ) : (
                 <Button
