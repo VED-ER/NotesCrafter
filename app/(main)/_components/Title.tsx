@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { api } from "@/convex/_generated/api"
 import { Doc } from "@/convex/_generated/dataModel"
+import { cn } from "@/lib/utils"
 import { useMutation } from "convex/react"
+import { useParams, useRouter } from "next/navigation"
 import { useState, useRef } from "react"
 
 type TitleProps = {
@@ -15,17 +17,25 @@ type TitleProps = {
 const Title = ({ initialData }: TitleProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState(initialData.title || "Untitled")
+
+    const params = useParams()
+    const router = useRouter()
     const update = useMutation(api.notes.update)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const enableInput = () => {
-        setTitle(initialData.title)
-        setIsEditing(true)
-        setTimeout(() => {
-            inputRef.current?.focus()
-            inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
-        }, 0);
+
+    const onTitleClick = () => {
+        if (params.noteId !== initialData._id) {
+            router.push('/notes/'.concat(initialData._id))
+        } else {
+            setTitle(initialData.title)
+            setIsEditing(true)
+            setTimeout(() => {
+                inputRef.current?.focus()
+                inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+            }, 0);
+        }
     }
 
     const disableInput = () => {
@@ -54,19 +64,20 @@ const Title = ({ initialData }: TitleProps) => {
             {isEditing ? (
                 <Input
                     ref={inputRef}
-                    onClick={enableInput}
+                    onClick={onTitleClick}
                     onBlur={disableInput}
                     onChange={onChange}
                     onKeyDown={onKeyDown}
                     value={title}
-                    className="h-7 px-2 focus-visible:ring-transparent"
+                    className="h-7 px-2 "
                 />
             ) : (
                 <Button
-                    onClick={enableInput}
+                    onClick={onTitleClick}
                     variant={'ghost'}
                     size={'sm'}
-                    className="font-normal h-auto p-1"
+                    className={cn("font-normal h-auto p-1 text-sm px-2", 
+                    params.noteId === initialData._id && "bg-secondary")}
                 >
                     <span className="truncate">
                         {initialData.title}
@@ -74,12 +85,6 @@ const Title = ({ initialData }: TitleProps) => {
                 </Button>
             )}
         </div>
-    )
-}
-
-Title.Skeleton = function TitleSkeleton() {
-    return (
-        <Skeleton className="h-4 w-20 rounded-sm" />
     )
 }
 

@@ -95,7 +95,7 @@ export const removeNotes = mutation({
         }
         const userId = identity.subject
 
-        const deletedNotes = []
+        const deletedNotes: Doc<'notes'>[] = []
 
         for (const noteId of args.ids) {
 
@@ -374,5 +374,48 @@ export const removeCoverImage = mutation({
         const note = await ctx.db.patch(args.id, { coverImage: undefined })
 
         return note
+    }
+})
+
+export const getAllParents = query({
+    args: { noteId: v.id('notes') },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+
+        const note = await ctx.db.get(args.noteId)
+
+        if (!note) {
+            throw new Error('Not found')
+        }
+
+        if (!identity) {
+            throw new Error('Not authenticated')
+        }
+
+        const userId = identity.subject
+
+        if (note.userId !== userId) {
+            throw new Error('Unauthorized')
+        }
+
+        const notes = []
+        notes.push(note)
+
+        const getNextParent = async (noteId: Id<'notes'>) => {
+            const note = await ctx.db.get(noteId)
+
+            notes.unshift(note)
+
+            if (note?.parentNote) {
+                await getNextParent(note.parentNote)
+            }
+        }
+
+        if (note.parentNote) {
+
+            await getNextParent(note.parentNote)
+        }
+
+        return notes
     }
 })
