@@ -64,6 +64,7 @@ const NoteList = ({ parentNoteId, level = 0 }: NoteListProps) => {
                         id={doc._id}
                         onClick={() => onRedirect(doc._id)}
                         label={doc.title}
+                        pinned={doc.pinned}
                         icon={FileIcon}
                         noteIcon={doc.icon}
                         active={params.noteId === doc._id}

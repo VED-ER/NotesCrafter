@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from "@/lib/utils"
-import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react"
+import { ChevronsLeft, MenuIcon, PinIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { ElementRef, useEffect, useRef, useState } from "react"
 import { useMediaQuery } from "usehooks-ts"
@@ -116,6 +116,10 @@ const Navigation = () => {
         })
     }
 
+    const onPinnedClick = () => {
+        router.push('/pinned')
+    }
+
     return <>
         <aside
             ref={sidebarRef}
@@ -142,6 +146,12 @@ const Navigation = () => {
                     label="Settings"
                     onClick={settings.onOpen}
                     icon={Settings}
+                />
+                <SidebarItem
+                    label="Pinned"
+                    onClick={onPinnedClick}
+                    icon={PinIcon}
+                    active={pathname === '/pinned'}
                 />
                 <SidebarItem
                     label="New Note"

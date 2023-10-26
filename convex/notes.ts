@@ -113,7 +113,7 @@ export const removeNotes = mutation({
             deletedNotes.push(note)
         }
         // if deleted and has children, remove parentNote from all children
-        
+
         return deletedNotes
     }
 })
@@ -228,7 +228,8 @@ export const create = mutation({
             parentNote: args.parentNote,
             userId,
             isArchived: false,
-            isPublished: false
+            isPublished: false,
+            pinned: false
         })
         return note
     }
@@ -417,5 +418,53 @@ export const getAllParents = query({
         }
 
         return notes
+    }
+})
+
+export const getPinned = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+
+        if (!identity) {
+            throw new Error('Not authenticated')
+        }
+        const userId = identity.subject
+
+        const notes = await ctx.db.query('notes').withIndex('by_user', (q) => (
+            q.eq('userId', userId)
+        )).filter(q => q.eq(q.field('pinned'), true))
+            .filter(q => q.eq(q.field('isArchived'), false))
+            .order('desc').collect()
+
+        return notes
+    }
+})
+
+export const togglePinned = mutation({
+    args: {
+        id: v.id('notes')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+
+        if (!identity) {
+            throw new Error('Unauthenticated')
+        }
+
+        const userId = identity.subject
+
+        const existingNote = await ctx.db.get(args.id)
+
+        if (!existingNote) {
+            throw new Error('Not found')
+        }
+
+        if (existingNote.userId !== userId) {
+            throw new Error('Unauthorized')
+        }
+        // when creating new note, add pinned to false??
+        const note = await ctx.db.patch(args.id, { pinned: !existingNote.pinned })
+
+        return note
     }
 })

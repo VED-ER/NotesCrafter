@@ -10,11 +10,14 @@ import { useMutation } from "convex/react"
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontalIcon, PlusCircle, Trash } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import Menu from "./Menu"
+import { Button } from "@/components/ui/button"
 
 type SidebarItemProps = {
     id?: Id<'notes'>,
     noteIcon?: string,
     active?: boolean,
+    pinned?: boolean,
     expanded?: boolean,
     isSearch?: boolean,
     level?: number,
@@ -28,6 +31,7 @@ const SidebarItem = ({
     id,
     noteIcon,
     active,
+    pinned,
     expanded,
     isSearch,
     level = 0,
@@ -40,24 +44,10 @@ const SidebarItem = ({
     const ChevronIcon = expanded ? ChevronDown : ChevronRight
     const router = useRouter()
     const create = useMutation(api.notes.create)
-    const archive = useMutation(api.notes.archive)
-    const { user } = useUser()
 
     const handleExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation()
         onExpand?.()
-    }
-
-    const onArchive = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.stopPropagation()
-        if (!id) return
-        const promise = archive({ id }).then(() => router.push('/notes'))
-
-        toast.promise(promise, {
-            loading: `Moving ${label} to trash...`,
-            success: `${label} moved to trash!`,
-            error: `Failed to archive ${label}.`
-        })
     }
 
     const handleCreateChildNote = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -105,34 +95,15 @@ const SidebarItem = ({
             <span className="truncate">{label}</span>
             {!!id && (
                 <div className="ml-auto flex items-center gap-x-2">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger
-                            asChild
-                            onClick={(e) => e.stopPropagation()}
+                    <Menu noteId={id} pinned={pinned} align="start" side="right">
+                        <Button
+                            size={'sm'}
+                            variant={'ghost'}
+                            className="opacity-0 p-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
                         >
-                            <div
-                                role="button"
-                                className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                            >
-                                <MoreHorizontalIcon className="w-4 h-4 text-muted-foreground" />
-                            </div>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                            className="w-60"
-                            align="start"
-                            side="right"
-                            forceMount
-                        >
-                            <DropdownMenuItem onClick={onArchive}>
-                                <Trash className="h-4 w-4 mr-2" />
-                                Delete
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <div className="text-xs text-muted-foreground p-2">
-                                Last edited by: {user?.fullName}
-                            </div>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            <MoreHorizontalIcon className="w-4 h-4 text-muted-foreground" />
+                        </Button>
+                    </Menu>
                     <div
                         role="button"
                         onClick={handleCreateChildNote}
