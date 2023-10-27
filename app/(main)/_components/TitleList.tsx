@@ -47,12 +47,17 @@ const TitleList = ({ note }: TitleListProps) => {
             onWheel={handleScroll}
             ref={containerRef}
         >
-            {notes.map((note, idx) => (
-                <div className="flex items-center space-x-1">
-                    <Title key={note._id} initialData={note} />
-                    {idx !== notes.length - 1 && <ChevronRightIcon className="w-4 h-4 text-muted-foreground" />}
-                </div>
-            ))}
+            {notes.map((note) => {
+                if (note) return (
+                    <div key={note._id} className="flex items-center space-x-1">
+                        <Title initialData={note} />
+                        <ChevronRightIcon className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                )
+            })}
+            <div key={note._id} className="flex items-center space-x-1">
+                <Title initialData={note} />
+            </div>
         </div>
     )
 }

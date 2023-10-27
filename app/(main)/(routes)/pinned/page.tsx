@@ -8,7 +8,6 @@ import { useMutation, useQuery } from "convex/react"
 import { PinIcon, PinOffIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { toast } from "sonner";
 import Menu from "../../_components/Menu";
 import { Spinner } from "@/components/Spinner";
 
@@ -16,16 +15,12 @@ const PinnedPage = () => {
     const [pinning, setPinning] = useState(false)
     const notes = useQuery(api.notes.getPinned)
     const togglePinned = useMutation(api.notes.togglePinned)
-    const archive = useMutation(api.notes.archive)
-    console.log(notes);
 
     if (notes === undefined) {
         return <div className="h-full flex items-center justify-center"><Spinner size={'lg'} /></div>
     }
 
     if (notes === null || notes.length === 0) {
-        console.log('asdasddsasda');
-
         return (<div className="h-full flex flex-col items-center justify-center space-y-4">
             <Image
                 src={'/error.png'}
@@ -43,25 +38,12 @@ const PinnedPage = () => {
             />
             <h2 className="text-xl font-medium">You have no pinned notes.</h2>
             <p>Start pinning notes and they will show up here.</p>
-
         </div>)
     }
 
     const onPinClick = (noteId: Id<'notes'>) => {
         setPinning(true)
         togglePinned({ id: noteId }).then(() => setPinning(false))
-    }
-
-    const onArchive = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, noteId: Id<'notes'>) => {
-        e.stopPropagation()
-        if (!noteId) return
-        const promise = archive({ id: noteId })
-
-        toast.promise(promise, {
-            loading: 'Moving to trash...',
-            error: 'Failed to archive note.',
-            success: 'Note moved to trash!'
-        })
     }
 
     const formatNicely = (date: Date) => {

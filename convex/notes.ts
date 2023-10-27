@@ -399,8 +399,7 @@ export const getAllParents = query({
             throw new Error('Unauthorized')
         }
 
-        const notes = []
-        notes.push(note)
+        const notes: Array<Doc<'notes'> | null> = []
 
         const getNextParent = async (noteId: Id<'notes'>) => {
             const note = await ctx.db.get(noteId)

@@ -5,9 +5,10 @@ import Toolbar from "@/components/Toolbar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
+import { useActiveNote } from "@/hooks/useActiveNote"
 import { useMutation, useQuery } from "convex/react"
 import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 type NoteIdPageProps = {
     params: {
@@ -18,6 +19,7 @@ type NoteIdPageProps = {
 const NoteIdPage = ({ params }: NoteIdPageProps) => {
     const Editor = useMemo(() => dynamic(() => import("@/components/Editor"), { ssr: false }), []) // recommended way to import Editor from noteation
 
+    const { setActiveNote } = useActiveNote()
     const note = useQuery(api.notes.getById, { noteId: params.noteId })
     const update = useMutation(api.notes.update)
 
@@ -25,6 +27,12 @@ const NoteIdPage = ({ params }: NoteIdPageProps) => {
         update({ id: params.noteId, content })
 
     }
+
+    useEffect(() => {
+        if (note !== undefined) {
+            setActiveNote(note)
+        }
+    }, [note])
 
     // const note = undefined
     if (note === undefined) {

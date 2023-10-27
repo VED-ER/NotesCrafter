@@ -45,7 +45,7 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                         <TitleList note={note} />
                         <div className="flex items-center gap-x-2">
                             <Publish initialData={note} />
-                            <Menu noteId={note._id} />
+                            <Menu noteId={note._id} pinned={note.pinned} />
                         </div>
                     </div>
                 )}
