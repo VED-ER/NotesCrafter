@@ -203,7 +203,6 @@ export const getSidebar = query({
                     .eq('parentNote', args.parentNote)
             )
             .filter(q => q.eq(q.field('isArchived'), false))
-            .order('desc')
             .collect()
 
         return notes

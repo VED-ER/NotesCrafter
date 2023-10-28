@@ -1,23 +1,16 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { api } from "@/convex/_generated/api"
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation, useQuery } from "convex/react"
-import { PinIcon, PinOffIcon } from "lucide-react";
+import { useQuery } from "convex/react"
 import Image from "next/image";
-import { useState } from "react";
-import Menu from "../../_components/Menu";
 import { Spinner } from "@/components/Spinner";
+import NoteCard from "../../_components/NoteCard";
 
 const PinnedPage = () => {
-    const [pinning, setPinning] = useState(false)
     const notes = useQuery(api.notes.getPinned)
-    const togglePinned = useMutation(api.notes.togglePinned)
 
     if (notes === undefined) {
-        return <div className="h-full flex items-center justify-center"><Spinner size={'lg'} /></div>
+        return <div className="h-full flex items-center justify-center"><Spinner size={'icon'} /></div>
     }
 
     if (notes === null || notes.length === 0) {
@@ -41,63 +34,11 @@ const PinnedPage = () => {
         </div>)
     }
 
-    const onPinClick = (noteId: Id<'notes'>) => {
-        setPinning(true)
-        togglePinned({ id: noteId }).then(() => setPinning(false))
-    }
-
-    const formatNicely = (date: Date) => {
-        return date.toLocaleString(undefined, {
-            year: 'numeric',
-            month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-    }
-
     return (
         <div className="w-full md:max-w-3xl lg:max-w-5xl mx-auto p-5">
             <div className="space-y-6 py-8 md:columns-2 sm:gap-6 xl:columns-3 gap-3">
                 {notes?.map(note => (
-                    <Card key={note._id} className="flex-1 break-inside-avoid border border-gray-30 h-fit">
-                        <CardHeader>
-                            <CardTitle className="mb-4 last:mb-0 leading-5">{note.icon} {note.title}</CardTitle>
-                            {note?.coverImage && (
-                                <div className="h-48 relative">
-                                    <Image
-                                        src={note.coverImage}
-                                        alt="note image"
-                                        className='object-cover rounded-md'
-                                        fill
-                                    />
-                                </div>
-                            )}
-                            {/* <CardDescription></CardDescription> */}
-                        </CardHeader>
-                        <CardContent>
-                            <p>Created at: {formatNicely(new Date(note._creationTime))}</p>
-                        </CardContent>
-                        <CardFooter>
-                            {note.pinned ? (
-                                <Button
-                                    variant={'ghost'}
-                                    onClick={() => onPinClick(note._id)}
-                                    disabled={pinning}
-                                >
-                                    <PinOffIcon className="h-4 w-4" />
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant={'ghost'}
-                                    onClick={() => onPinClick(note._id)}
-                                    disabled={pinning}
-                                >
-                                    <PinIcon className="h-4 w-4" />
-                                </Button>
-                            )}
-                            <div className="ms-auto">
-                                <Menu noteId={note._id} pinned={note.pinned} align="center" />
-                            </div>
-                        </CardFooter>
-                    </Card>
+                    <NoteCard key={note._id} note={note} />
                 ))}
             </div>
         </div>
