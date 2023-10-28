@@ -27,9 +27,7 @@ const Menu = ({ noteId, side, children, pinned, align = "end" }: MenuProps) => {
 
     const onArchive = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation()
-        const promise = archive({ id: noteId }).then(() => {
-            router.push('/notes')
-        })
+        const promise = archive({ id: noteId })
 
         toast.promise(promise, {
             loading: 'Moving to trash...',
