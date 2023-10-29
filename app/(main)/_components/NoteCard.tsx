@@ -31,7 +31,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     return (
         <Card
             key={note._id}
-            className="flex-1 break-inside-avoid border border-gray-30 h-fit hover:bg-card/50 cursor-pointer"
+            className="flex-1 break-inside-avoid border shadow border-gray-30 h-fit hover:bg-card/50 cursor-pointer"
             onClick={onCardClick}
         >
             <CardHeader>
