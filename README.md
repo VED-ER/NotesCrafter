@@ -28,7 +28,7 @@ A user-friendly note-taking web app with versatile features, real time data upda
 
 
 ## Screenshot
-todo
+![notescrafter-dashboard](https://github.com/VED-ER/NotesCrafter/assets/92994473/852b11fa-4347-4827-984a-ac9c6709ed15)
 
 
 ## Author
